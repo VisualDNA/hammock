@@ -71,6 +71,14 @@ class TestCaseWrest(unittest.TestCase):
         self.assertTrue(called)
         self.assertEqual(HTTPretty.last_request.path, self.PATH)
 
+    @httprettified
+    def test_requests_kwargs(self):
+        """Test conformity with new requests API"""
+        HTTPretty.register_uri(HTTPretty.GET, self.URL)
+        client = Hammock(self.BASE_URL, params={'foo': 'bar'})
+        resp = client.sample.path.to.resource.GET()
+        self.assertEqual(HTTPretty.last_request.path, '/sample/path/to/resource?foo=bar')
+
 
 if __name__ == '__main__':
     unittest.main()
